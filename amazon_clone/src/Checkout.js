@@ -41,7 +41,6 @@ function Checkout() {
         <div className="checkout_left">
           <div>
             <h2 className="checkout_title">Your shopping Basket</h2>
-            {/* {CheckoutProduct} */}
             {store.getState().cart.map((item) => (
               <CheckoutProduct
                 key={item.img} //unique identifier for each item
