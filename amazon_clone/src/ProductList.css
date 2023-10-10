@@ -1,0 +1,130 @@
+.container {
+  width: 100%;
+  background-color: white;
+  /* display: flex; */
+  /* justify-content: flex-start; */
+}
+
+.leftBanner {
+  display: flex;
+  /* background-color: pink; */
+  flex-direction: column;
+  /* ON HOLD. Modify the width once leftBanner is completed */
+  /* width: calc((100% - 5 * (20% - 16px))); */
+}
+
+.listContainer {
+  /* background-color: black; */
+  display: flex;
+  justify-content: center;
+  margin-left:10%;
+  /* flex-direction: column; */
+}
+
+.row {
+  display: flex;
+  /* break the line once flex item reaches the end of container. */
+  background-color: white;
+  justify-content: flex-start;
+  /* Adjust this to account for the margin on the items */
+  width: calc(50% + 16px);
+}
+
+.product {
+  display: flex;
+  flex-wrap: wrap;
+  height: 380px;
+  /* flex-direction: column; */
+  background-color: white;
+  /* border-color: white; */
+  /* Take up 20% of the container width minus the margin */
+  flex: 0 0 calc(30% - 60px);
+  /* margin-right: 16px; */
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+/* Adjusted margin for only two items */
+.product.two-items:first-child {
+  display: flex;
+  flex-wrap: wrap;
+  height: 380px;
+  flex-direction: row;
+  background-color: white;
+  margin-right: 90px;
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.product.less-than-five {
+  display: flex;
+  flex-wrap: wrap;
+  height: 380px;
+  flex-direction: row;
+  background-color: white;
+  /* margin-right: 90px; */
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.product.less-than-five:last-child,
+.product:nth-child(5n) {
+  margin-right: 0;
+}
+
+/* Remove extra space between product items */
+.phantom {
+  flex: 0 0 calc(20% - 16px);
+  margin-bottom: 16px;
+  margin-top: 16px;
+  visibility: hidden;
+}
+
+.card {
+  width: 12rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Take up 20% of the container width minus the margin */
+  flex: 0 0 calc(20% - 16px);
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+
+.card > Img {
+  height: 150px;
+  object-fit: contain;
+  padding-top: 25px;
+  max-width: 180px;
+  max-height: 250px;
+}
+
+.item_detail {
+  display: flex;
+  flex-direction: column;
+  margin: 20px 10px;
+}
+
+.item_title {
+  padding: 15px 5px;
+  display: flex;
+  font-size: 16px;
+  text-align: justify;
+  word-break: break-all;
+  font-weight: 500;
+}
+
+.price {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 5px auto;
+}
+
+.addToCart_button {
+  background-color: #fde34e;
+  border-radius: 3px;
+  /* width: 100%; */
+  /* height: 30px; */
+  border: 1px solid;
+  margin-top: 20px;
+}
