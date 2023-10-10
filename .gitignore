@@ -1,0 +1,5 @@
+node_modules/
+functions/
+firebase-debug.log
+ui-debug.log
+credential.js
