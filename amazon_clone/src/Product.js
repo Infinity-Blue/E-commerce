@@ -74,7 +74,6 @@ function Product({ title, img }) {
       <div className="homeProduct_items">
         {title.slice(2, 4).map((singleTitle, index) => homeItem(singleTitle, index + 2))}
       </div>
-      {/* <button onClick={addToCart}>Add to Cart</button> */}
     </div>
   );
 }
@@ -86,7 +85,6 @@ function Product2({ title, img }) {
         <span className="homeProduct_title">{title}</span>
         <img src={img} alt="" />
       </div>
-      {/* <button onclick={addToCart}>Add to Cart</button> */}
     </div>
   );
 }

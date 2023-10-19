@@ -17,13 +17,12 @@ export function computeCartQuantity(cartItems) {
 export const getTotalPrice = (cart) => {
   console.log(typeof cart, "Array? ", Array.isArray(cart));
   return cart?.reduce((total, item) => total + item.price * item.quantity, 0);
-  // return Array.from(cart).reduce((total, item) => total.concat(item), []);
-  // return Array.from(cart).reduce((total, item) => total + item.price[0], 0);
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case "ADD_TO_CART":
+      console.log("AddtoCart is running");
       if (!Array.isArray(state.cart)) {
         console.error("Cart is not an array during add:", state.cart);
       }
@@ -89,6 +88,7 @@ const reducer = (state = initialState, action) => {
         cart: [],
       };
     case "SET_USER":
+      console.log("store user data..", action.user);
       return {
         ...state,
         user: action.user,

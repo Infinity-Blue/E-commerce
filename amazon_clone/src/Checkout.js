@@ -7,12 +7,6 @@ import { useStateValue } from "./StateProvider";
 import CheckoutProduct from "./CheckoutProduct";
 
 function Checkout() {
-  // const addToCart = () => {
-  // 	store.dispatch({
-  // 		type: 'RESET'
-  // 	});
-  // };
-  // addToCart()
   const [currentPrice, setPrice] = useState(getTotalPrice(store.getState().cart));
 
   useEffect(() => {

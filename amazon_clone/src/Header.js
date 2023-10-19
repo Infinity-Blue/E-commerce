@@ -38,8 +38,9 @@ function Header(props) {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [cartQuantity]);
 
+  //Listen to whether the user logins or logs out.
   useEffect(() => {
     let previousUserState = store.getState().user;
     //subscribe to changes in the entire Redux stre.
@@ -47,7 +48,7 @@ function Header(props) {
       console.log("State after dispatch: ", store.getState().user);
       const currentUserState = store.getState().user;
 
-      // Check if user state has changed
+      // Check if user state has changed.
       if (previousUserState !== currentUserState) {
         setUser(currentUserState); //Rerender whenever the user logins or login out.
         previousUserState = currentUserState;
@@ -61,6 +62,7 @@ function Header(props) {
 
   const handleAuthentication = () => {
     if (store.getState().user) {
+      store.dispatch({ type: "RESET" });
       auth.signOut();
     }
   };

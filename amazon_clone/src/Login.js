@@ -13,6 +13,7 @@ import {
   collectionGroup,
   connectFirestoreEmulator,
 } from "firebase/firestore";
+import store from "./store";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ function Login() {
     auth
       .signInWithEmailAndPassword(email, password)
       .then((auth) => {
+        updateReduxCart(auth.user.uid);
         navigate("/");
       })
       .catch((error) => {
@@ -39,15 +41,14 @@ function Login() {
       .createUserWithEmailAndPassword(email, password)
       //if successfully created a new user
       .then((auth) => {
-        console.log(auth.user);
-        // const user = auth.user;
-        // // Check if the user object is defined
-        // if (user) {
-        //   createUserInFirestore(user);
-        // } else {
-        //   console.error("User object is undefined.");
-        // }
         updateFsDatabase(auth.user.uid, email);
+        //store user data in Redux so that user data can be accessed from any component.
+        if (auth.user) {
+          store.dispatch({
+            type: "SET_USER",
+            user: auth.user,
+          });
+        }
         navigate("/");
       })
       .catch((error) => {
@@ -106,4 +107,32 @@ const updateFsDatabase = async (userId, email) => {
   // Set the user data in Firestore
   await setDoc(userDocRef, userData);
 };
+
+/**
+ *  Fetch the cart data of the user from Firestore database and update Redux store accordingly.
+ */
+const updateReduxCart = async (userID) => {
+  // User is signed in, fetch their cart from Firestore
+  const userDocRef = doc(db, "users", userID);
+  const userDoc = await getDoc(userDocRef);
+  if (userDoc.exists()) {
+    const userData = userDoc.data();
+    const userCart = userData.cart || [];
+
+    if (userCart.length > 0) {
+      for (let i = 0; i < userCart.length; i++) {
+        store.dispatch({
+          type: "ADD_TO_CART",
+          item: {
+            img: userCart[i].detail.img,
+            price: userCart[i].detail.price,
+            title: userCart[i].detail.name,
+            quantity: userCart[i].quantity,
+          },
+        });
+      }
+    }
+  }
+};
+
 export default Login;

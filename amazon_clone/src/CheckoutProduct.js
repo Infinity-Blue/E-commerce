@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import "./CheckoutProduct.css";
 import store from "./store";
 import { ConstructionOutlined } from "@mui/icons-material";
+import { getDocs, getDoc, doc, updateDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { db } from "./firebase";
 
 function CheckoutProduct({ title, img, price, id, itemQuantity }) {
   const [quantity, setQuantity] = useState(1);
-  // const [cartQuantity, setCartQuantity] = useState();
-  //   const itemInCart = store.getState().cart.find((item) => item.img == img);
-  //   console.log("[Checkoutproduct] itemInCart: ", itemInCart);
+  const user = store.getState().user;
+  const cart = store.getState().cart;
+
   const handleQuantityChange = (e) => {
     const selectedQuantity = e.target.value;
     setQuantity(selectedQuantity);
@@ -15,31 +17,81 @@ function CheckoutProduct({ title, img, price, id, itemQuantity }) {
     // Handle further actions such as updating the cart total, etc.
     const itemIndex = store.getState().cart.findIndex((item) => item.img == img);
     console.log(store.getState().cart[itemIndex].quantity);
-    if (quantity != selectedQuantity) quantityChange(selectedQuantity);
+
+    if (quantity != selectedQuantity) {
+      quantityChange(selectedQuantity);
+    }
   };
 
   useEffect(() => {
     setQuantity(itemQuantity);
   }, [itemQuantity]);
 
-  const quantityChange = (newQuantity) => {
+  /**
+   * Update the quantity of Firestore database and Redux store
+   * @param {*} newQuantity   New quantity to be updated
+   */
+  const quantityChange = async (newQuantity) => {
     console.log(img);
+    const itemDocRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(itemDocRef);
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      const currentCart = userData.cart || [];
+      const index = currentCart.findIndex((item) => item.detail.img === img);
+
+      const updatedItem = {
+        ...currentCart[index],
+        quantity: Number(newQuantity),
+      };
+      let cartUpdated = [...currentCart];
+      cartUpdated[index] = updatedItem;
+      // Updating the cart in Firestore
+      await updateDoc(itemDocRef, { cart: cartUpdated });
+    }
+
     store.dispatch({
       type: "CHANGE_QUANTITY",
       img: img,
       quantityChange: newQuantity,
     });
     //Refresh the entire page to update the page once the cart item is deleted.
-    // window.location.reload();
+    window.location.reload();
   };
 
   const removeFromBasket = () => {
+    console.log("removeFromBasket");
     store.dispatch({
       type: "DELETE_FROM_CART",
       img: img,
     });
-    //Refresh the entire page to update the page once the cart item is deleted.
-    window.location.reload();
+  };
+
+  const updateFirestore = async () => {
+    console.log("updateFirestore");
+    // Update Firestore to match the current state of the cart
+    const itemDocRef = doc(db, "users", user.uid);
+    const docSnap = await getDoc(itemDocRef);
+    if (docSnap.exists()) {
+      const userData = docSnap.data();
+      const currentCart = userData.cart || [];
+      console.log("currentCart is: ", currentCart);
+
+      // Modifying the cart array
+      const updatedCart = currentCart.filter((item) => item.detail.img !== img);
+      console.log("updateCart is: ", updatedCart);
+
+      // Updating the cart in Firestore
+      await updateDoc(itemDocRef, { cart: updatedCart });
+      console.log("Document successfully deleted!");
+    } else {
+      console.log("No such document!");
+    }
+  };
+
+  const handleRemove = () => {
+    updateFirestore();
+    removeFromBasket();
   };
 
   return (
@@ -58,7 +110,7 @@ function CheckoutProduct({ title, img, price, id, itemQuantity }) {
             ))}
           </select>
         </div>
-        <button onClick={() => removeFromBasket()}>Remove</button>
+        <button onClick={() => handleRemove()}>Remove</button>
       </div>
     </div>
   );

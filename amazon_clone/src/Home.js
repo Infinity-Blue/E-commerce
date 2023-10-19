@@ -12,7 +12,6 @@ import {
   connectFirestoreEmulator,
 } from "firebase/firestore";
 // import db from './firebase/index'
-import DataReader from "./DataReader";
 import HomeData from "./HomeData";
 
 function Home({ homeProduct }) {
@@ -43,18 +42,8 @@ function Home({ homeProduct }) {
 
   let topLeftItem_img = [];
   let topRightItem_img = [];
-  const topLeftItem_title = [
-    "Computer mice",
-    "Headsets",
-    "Keyboards",
-    "Laptop",
-  ];
-  const topRightItem_title = [
-    "Mascara",
-    "Lipstick",
-    "Moisturizer",
-    "Skin Serum",
-  ];
+  const topLeftItem_title = ["Computer mice", "Headsets", "Keyboards", "Laptop"];
+  const topRightItem_title = ["Mascara", "Lipstick", "Moisturizer", "Skin Serum"];
 
   let index = 0;
   for (var i = 0; i < product.length; i++) {
@@ -75,7 +64,6 @@ function Home({ homeProduct }) {
 
   return (
     <div className="home">
-      {/* <DataReader data_field={val} /> */}
       <div className="home_container">
         <img
           src="https://m.media-amazon.com/images/I/61-8rBAD68L._SX3000_.jpg"
